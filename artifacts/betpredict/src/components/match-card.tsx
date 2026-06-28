@@ -49,7 +49,7 @@ export function MatchCard({ match: m }: { match: Match }) {
             {m.status === "upcoming" && (
               <div className="flex items-center gap-1 text-muted-foreground">
                 <Clock className="w-3 h-3" />
-                <span className="text-xs">{m.matchTime}</span>
+                <span className="text-xs">{formatMatchDate(m.matchDate)} · {m.matchTime}</span>
               </div>
             )}
           </div>
