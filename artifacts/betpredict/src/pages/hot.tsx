@@ -1,5 +1,5 @@
 import { useGetHotGames } from "@workspace/api-client-react";
-import { Flame, Zap, TrendingUp } from "lucide-react";
+import { Flame, Zap, TrendingUp, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { MatchCard } from "@/components/match-card";
@@ -67,6 +67,10 @@ export default function HotPage() {
                 <p className="text-4xl font-black text-accent">{hotGames[0].valueRating.toFixed(1)}</p>
               </div>
             </div>
+            <div className="flex items-center gap-1.5 mb-3 text-muted-foreground">
+              <Clock className="w-3 h-3" />
+              <span className="text-xs">{fmtDate(hotGames[0].matchDate)} · {hotGames[0].matchTime} UTC</span>
+            </div>
             <div className="flex items-center gap-3 flex-wrap">
               <PredictionBadge prediction={hotGames[0].prediction} label={hotGames[0].predictionLabel} />
               <div className="flex gap-2">
@@ -107,6 +111,10 @@ export default function HotPage() {
       </div>
     </div>
   );
+}
+
+function fmtDate(d: string) {
+  return new Date(d + "T00:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 }
 
 function OddsPill({ label, value, active }: { label: string; value: number; active: boolean }) {

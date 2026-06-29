@@ -1,5 +1,5 @@
 import { useGetStatsSummary, useGetBetOfTheDay, useGetHotGames, useListMatches } from "@workspace/api-client-react";
-import { Activity, Flame, Target, Trophy, ArrowRight, TrendingUp, Globe, Shield } from "lucide-react";
+import { Activity, Flame, Target, Trophy, ArrowRight, TrendingUp, Globe, Shield, Clock, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,10 @@ import { Link } from "wouter";
 import { MatchCard } from "@/components/match-card";
 import { ConfidenceBar } from "@/components/confidence-bar";
 import { PredictionBadge } from "@/components/prediction-badge";
+
+function fmtShortDate(d: string) {
+  return new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
 
 export default function Dashboard() {
   const { data: stats, isLoading: statsLoading } = useGetStatsSummary();
@@ -74,7 +78,12 @@ export default function Dashboard() {
                   <div key={i} className="flex items-center justify-between p-2 rounded bg-background/50 border border-border">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-white truncate">{s.homeTeam} vs {s.awayTeam}</p>
-                      <p className="text-xs text-muted-foreground">{s.league}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-xs text-muted-foreground">{s.league}</span>
+                        <span className="text-muted-foreground/40 text-xs">·</span>
+                        <Calendar className="w-3 h-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">{fmtShortDate(s.matchDate)}</span>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2 ml-2 shrink-0">
                       <PredictionBadge prediction={s.prediction} label={s.predictionLabel} />
@@ -124,6 +133,9 @@ export default function Dashboard() {
                         <div className="flex items-center gap-1.5">
                           <span className="text-accent text-xs">{m.countryFlag}</span>
                           <span className="text-xs text-muted-foreground truncate">{m.league}</span>
+                          <span className="text-muted-foreground/40 text-xs">·</span>
+                          <Clock className="w-3 h-3 text-muted-foreground shrink-0" />
+                          <span className="text-xs text-muted-foreground shrink-0">{fmtShortDate(m.matchDate)}</span>
                         </div>
                         <p className="text-sm font-medium text-white truncate">{m.homeTeam} vs {m.awayTeam}</p>
                       </div>

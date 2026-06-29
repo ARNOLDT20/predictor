@@ -25,6 +25,11 @@ interface Match {
   isHot: boolean;
 }
 
+function formatMatchDate(dateStr: string): string {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
+
 export function MatchCard({ match: m }: { match: Match }) {
   return (
     <Link href={`/matches/${m.id}`}>
