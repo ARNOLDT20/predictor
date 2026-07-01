@@ -1,0 +1,14 @@
+# Dockerfile.migrate — runs drizzle-kit push to apply schema changes
+FROM node:24-slim
+
+WORKDIR /app
+
+RUN npm install -g pnpm@latest
+
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
+COPY lib/db/package.json ./lib/db/
+RUN pnpm install --frozen-lockfile --filter @workspace/db...
+
+COPY lib/db/ ./lib/db/
+
+CMD ["pnpm", "--filter", "@workspace/db", "run", "push-force"]

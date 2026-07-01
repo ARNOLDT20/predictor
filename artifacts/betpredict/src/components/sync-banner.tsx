@@ -6,7 +6,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useEffect, useRef } from "react";
 
 export function SyncBanner() {
-  const { data: status, refetch } = useGetSyncStatus({ query: { refetchInterval: 8000 } });
+  const { data: status, refetch } = useGetSyncStatus({
+    query: { queryKey: getGetSyncStatusQueryKey(), refetchInterval: 8000 },
+  });
   const triggerSync = useTriggerSync();
   const queryClient = useQueryClient();
   const { toast } = useToast();

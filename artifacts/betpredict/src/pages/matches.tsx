@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useListMatches, useListLeagues, useListCountries, getListMatchesQueryKey } from "@workspace/api-client-react";
+import { useListMatches, useListLeagues, useListCountries, getListMatchesQueryKey, type ListMatchesStatus } from "@workspace/api-client-react";
+import type { Match } from "@workspace/api-client-react";
 import { Search, Filter, LayoutGrid, List, ChevronLeft, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ export default function MatchesPage() {
     ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(leagueId && leagueId !== "all" ? { leagueId } : {}),
     ...(country && country !== "all" ? { country } : {}),
-    ...(status && status !== "all" ? { status } : {}),
+    ...(status && status !== "all" ? { status: status as ListMatchesStatus } : {}),
     page,
     limit: 12,
   };
@@ -220,7 +221,7 @@ export default function MatchesPage() {
   );
 }
 
-function groupMatches(matches: ReturnType<typeof useListMatches>["data"] extends { matches: infer M } ? M : never[], key: "league" | "country") {
+function groupMatches(matches: Match[], key: "league" | "country") {
   return matches.reduce(
     (acc, m) => {
       const k = key === "league" ? m.league : m.country;
@@ -228,6 +229,6 @@ function groupMatches(matches: ReturnType<typeof useListMatches>["data"] extends
       acc[k].push(m);
       return acc;
     },
-    {} as Record<string, typeof matches>
+    {} as Record<string, Match[]>,
   );
 }
